@@ -1,0 +1,56 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Platform_Cont : MonoBehaviour
+{
+    public Color OnColor;
+    public Color OffColor;
+
+    public SpriteRenderer LightIndicator;
+    public bool IsOn = false;
+
+    public AudioSource audioOn;
+    public AudioSource audioOff;
+
+    bool alreadyDetected = false;
+    int objectOn=0;
+
+    private void Start()
+    {
+        LightIndicator.color = OffColor;
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Player") {
+            objectOn += 1;
+            if (alreadyDetected == false) {
+                LightIndicator.color = OnColor;
+                IsOn = true;
+                audioOn.Play();
+                alreadyDetected = true;
+                
+            }
+         
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            objectOn -= 1;
+            if (objectOn == 0) {
+                if (alreadyDetected == true)
+                {
+                    LightIndicator.color = OffColor;
+                    IsOn = false;
+                    audioOff.Play();
+                    alreadyDetected = false;
+                }
+            }
+            
+            
+        }
+    }
+}
